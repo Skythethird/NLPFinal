@@ -12,6 +12,7 @@ import numpy as np
 import pandas as pd
 import pickle
 from datetime import date, datetime
+from flask_cors import CORS
 
 from pythainlp import word_tokenize
 from tqdm import tqdm_notebook
@@ -27,6 +28,8 @@ from pythainlp.ulmfit import *
 
 
 app=Flask(__name__)
+CORS(app)
+# app.config['CORS_HEADERS'] = 'Content-Type'
 db=SQLAlchemy(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///database.db"
 api=Api(app)
@@ -180,7 +183,10 @@ class Sentiment(Resource):
         if y_pred[0] == 'angry' and prob == 'sad':
             purport = 'disgusting post'
 
-
+        if like == love and like == wow and like == haha and like == sad and like == angry:
+            y_pred[0] = 'unpredict'
+            prob = 'unpredict'
+            purport = "Can't predict this text"
 
 
         sen = SentimentModel(text=texts[0],pre=y_pred[0], prob=prob,purport=purport,like=like,love=love,haha=haha,wow=wow,sad=sad,angry=angry,p_date=p_date)
