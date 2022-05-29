@@ -39,6 +39,7 @@ class SentimentModel(db.Model):
     text=db.Column(db.String(1000),nullable=False)
     pre=db.Column(db.String(1000),nullable=False)
     prob=db.Column(db.String(100),nullable=False)
+    purport=db.Column(db.String(1000),nullable=False)
     like=db.Column(db.Float,nullable=False)
     love=db.Column(db.Float,nullable=False)
     haha=db.Column(db.Float,nullable=False)
@@ -68,12 +69,13 @@ resource_field={
     "text":fields.String,
     "pre":fields.String,
     "prob":fields.String,
-    "like":fields.String,
-    "love":fields.String,
-    "haha":fields.String,
-    "wow":fields.String,
-    "sad":fields.String,
-    "angry":fields.String,
+    "purport":fields.String,
+    "like":fields.Float,
+    "love":fields.Float,
+    "haha":fields.Float,
+    "wow":fields.Float,
+    "sad":fields.Float,
+    "angry":fields.Float,
     "p_date":fields.String,
 }
 
@@ -116,19 +118,86 @@ class Sentiment(Resource):
         cdf = cdf.replace(to_replace = 5 ,
                  value ="wow")
         prob = cdf['sad'][0]
-        print(datetime.now())
         p_date = datetime.now()
+        if y_pred[0] == 'like' and prob == 'love':
+            purport = 'Generally wholesome post'
+        if y_pred[0] == 'like' and prob == 'haha':
+            purport = 'Generally funny me-me'
+        if y_pred[0] == 'like' and prob == 'wow':
+            purport = 'Fun fact'
+        if y_pred[0] == 'like' and prob == 'sad':
+            purport = 'Sad, somewhat true story from generic relatable page'
+        if y_pred[0] == 'like' and prob == 'angry':
+            purport = 'Some controversial statement by a personality'
+        if y_pred[0] == 'love' and prob == 'like':
+            purport = 'Very acceptable'
+        if y_pred[0] == 'love' and prob == 'haha':
+            purport = 'Funny post'
+        if y_pred[0] == 'love' and prob == 'wow':
+            purport = 'Absurdist post'
+        if y_pred[0] == 'love' and prob == 'sad':
+            purport = 'Aww that is cute and quite ironic with our society post'
+        if y_pred[0] == 'love' and prob == 'angry':
+            purport = 'Really, really, really bad post'
+        if y_pred[0] == 'haha' and prob == 'like':
+            purport = 'Funny post haha from a generic post'
+        if y_pred[0] == 'haha' and prob == 'love':
+            purport = 'Really funny post and everyone agrees that it is funny'
+        if y_pred[0] == 'haha' and prob == 'wow':
+            purport = 'Very obvious post/fact'
+        if y_pred[0] == 'haha' and prob == 'sad':
+            purport = 'post that some people feel bad to laugh at'
+        if y_pred[0] == 'haha' and prob == 'angry':
+            purport = 'Dark post/bad post'
+        if y_pred[0] == 'wow' and prob == 'like':
+            purport = 'Surprising or Unknown fact'
+        if y_pred[0] == 'wow' and prob == 'love':
+            purport = 'wholesome post'
+        if y_pred[0] == 'wow' and prob == 'haha':
+            purport = 'probably memeing'
+        if y_pred[0] == 'wow' and prob == 'sad':
+            purport = 'Bad news'
+        if y_pred[0] == 'wow' and prob == 'angry':
+            purport = 'Doing fake thing'
+        if y_pred[0] == 'sad' and prob == 'like':
+            purport = 'Sad story'
+        if y_pred[0] == 'sad' and prob == 'love':
+            purport = 'Aww that is sad'
+        if y_pred[0] == 'sad' and prob == 'haha':
+            purport = 'When a person got a bad thing because of his own stupidity'
+        if y_pred[0] == 'sad' and prob == 'wow':
+            purport = 'Sad, shocking'
+        if y_pred[0] == 'sad' and prob == 'angry':
+            purport = 'A real drama'
+        if y_pred[0] == 'angry' and prob == 'like':
+            purport = 'angry but not much'
+        if y_pred[0] == 'angry' and prob == 'love':
+            purport = 'bad post but some one love'
+        if y_pred[0] == 'angry' and prob == 'haha':
+            purport = 'uncomfortable post'
+        if y_pred[0] == 'angry' and prob == 'wow':
+            purport = 'angry post'
+        if y_pred[0] == 'angry' and prob == 'sad':
+            purport = 'disgusting post'
 
 
 
 
-        sen = SentimentModel(text=texts[0],pre=y_pred[0], prob=prob,like=like,love=love,haha=haha,wow=wow,sad=sad,angry=angry,p_date=p_date)
+        sen = SentimentModel(text=texts[0],pre=y_pred[0], prob=prob,purport=purport,like=like,love=love,haha=haha,wow=wow,sad=sad,angry=angry,p_date=p_date)
         db.session.add(sen)
         db.session.commit()
         return sen,201
 
+class LogResource(Resource):
+    @marshal_with(resource_field)
+    def get(self,id):
+        result = SentimentModel.query.filter_by(id = id).first()
+        return result
+
+
 
 api.add_resource(Sentiment,'/sentiment')
+api.add_resource(LogResource,'/sentiment/history/<int:id>')
 
 
 
