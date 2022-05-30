@@ -151,15 +151,15 @@ class Sentiment(Resource):
         if y_pred[0] == 'haha' and prob == 'wow':
             purport = 'Very obvious post/fact'
         if y_pred[0] == 'haha' and prob == 'sad':
-            purport = 'post that some people feel bad to laugh at'
+            purport = 'Post that some people feel bad to laugh at'
         if y_pred[0] == 'haha' and prob == 'angry':
             purport = 'Dark post/bad post'
         if y_pred[0] == 'wow' and prob == 'like':
             purport = 'Surprising or Unknown fact'
         if y_pred[0] == 'wow' and prob == 'love':
-            purport = 'wholesome post'
+            purport = 'Wholesome post'
         if y_pred[0] == 'wow' and prob == 'haha':
-            purport = 'probably memeing'
+            purport = 'Probably memeing'
         if y_pred[0] == 'wow' and prob == 'sad':
             purport = 'Bad news'
         if y_pred[0] == 'wow' and prob == 'angry':
@@ -175,15 +175,15 @@ class Sentiment(Resource):
         if y_pred[0] == 'sad' and prob == 'angry':
             purport = 'A real drama'
         if y_pred[0] == 'angry' and prob == 'like':
-            purport = 'angry but not much'
+            purport = 'Angry but not much'
         if y_pred[0] == 'angry' and prob == 'love':
-            purport = 'bad post but some one love'
+            purport = 'Bad post but some one love'
         if y_pred[0] == 'angry' and prob == 'haha':
-            purport = 'uncomfortable post'
+            purport = 'Uncomfortable post'
         if y_pred[0] == 'angry' and prob == 'wow':
-            purport = 'angry post'
+            purport = 'Angry post'
         if y_pred[0] == 'angry' and prob == 'sad':
-            purport = 'disgusting post'
+            purport = 'Disgusting post'
 
         if like == love and like == wow and like == haha and like == sad and like == angry:
             pre = 'unpredict'
