@@ -14,6 +14,7 @@ import pickle
 from datetime import date, datetime
 from flask_cors import CORS
 
+
 from pythainlp import word_tokenize
 from tqdm import tqdm_notebook
 from pythainlp.ulmfit import process_thai
