@@ -98,6 +98,7 @@ class Sentiment(Resource):
         text = loaded_tfidf.transform(texts)
         X_test = text.toarray()
         y_pred = loaded_model.predict(X_test)
+        pre = y_pred[0]
         probs = loaded_model.predict_proba(X_test)
         probs_df = pd.DataFrame(probs)
         probs_df.columns = loaded_model.classes_
@@ -185,14 +186,16 @@ class Sentiment(Resource):
             purport = 'disgusting post'
 
         if like == love and like == wow and like == haha and like == sad and like == angry:
-            y_pred[0] = 'unpredict'
+            pre = 'unpredict'
             prob = 'unpredict'
             purport = "Can't predict this text"
+        
+        print(pre)
 
 
-        sen = SentimentModel(text=texts[0],pre=y_pred[0], prob=prob,purport=purport,like=like,love=love,haha=haha,wow=wow,sad=sad,angry=angry,p_date=p_date)
-        db.session.add(sen)
-        db.session.commit()
+        sen = SentimentModel(text=texts[0],pre=pre, prob=prob,purport=purport,like=like,love=love,haha=haha,wow=wow,sad=sad,angry=angry,p_date=p_date)
+        # db.session.add(sen)
+        # db.session.commit()
         return sen,201
 
 class LogResource(Resource):
