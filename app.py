@@ -194,8 +194,8 @@ class Sentiment(Resource):
 
 
         sen = SentimentModel(text=texts[0],pre=pre, prob=prob,purport=purport,like=like,love=love,haha=haha,wow=wow,sad=sad,angry=angry,p_date=p_date)
-        # db.session.add(sen)
-        # db.session.commit()
+        db.session.add(sen)
+        db.session.commit()
         return sen,201
 
 class LogResource(Resource):
