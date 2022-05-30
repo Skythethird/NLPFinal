@@ -126,7 +126,7 @@ class Sentiment(Resource):
         if y_pred[0] == 'like' and prob == 'love':
             purport = 'Generally wholesome post'
         if y_pred[0] == 'like' and prob == 'haha':
-            purport = 'Generally funny me-me'
+            purport = 'Generally funny post'
         if y_pred[0] == 'like' and prob == 'wow':
             purport = 'Fun fact'
         if y_pred[0] == 'like' and prob == 'sad':
