@@ -58,15 +58,7 @@ db.create_all()
 
 predict_add_args=reqparse.RequestParser()
 predict_add_args.add_argument("text",type=str)
-# predict_add_args.add_argument("pre",type=str)
-# predict_add_args.add_argument("prob",type=str)
-# predict_add_args.add_argument("like",type=str)
-# predict_add_args.add_argument("love",type=str)
-# predict_add_args.add_argument("haha",type=str)
-# predict_add_args.add_argument("wow",type=str)
-# predict_add_args.add_argument("sad",type=str)
-# predict_add_args.add_argument("angry",type=str)
-# predict_add_args.add_argument("date",type=datetime)
+
 
 resource_field={
     "id":fields.Integer,
@@ -93,7 +85,7 @@ class Sentiment(Resource):
     def post(self):
         args=predict_add_args.parse_args()
         loaded_tfidf = pickle.load(open('tfidf_fit.pkl', 'rb'))
-        loaded_model = pickle.load(open('model-0.763.pkl', 'rb'))
+        loaded_model = pickle.load(open('model.pkl', 'rb'))
         texts = [args["text"]]
         text = loaded_tfidf.transform(texts)
         X_test = text.toarray()
